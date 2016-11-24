@@ -1,6 +1,7 @@
 package net.trileg.scavenger;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.webkit.WebView;
@@ -46,19 +47,23 @@ public final class CustomWebView extends WebView {
             if (deltax > 200 && deltay < 90 && velo > 350) {
                 if (e1.getRawX() > e2.getRawX()) {
                     if (canGoForward()){
+                        Log.d("Debug", "move forward");
                         //Gesture : move forward
                         goForward();
                     }
                     else{
                         //Gesture : no more forward history
+                        Log.d("Debug", "no more forward history");
                     }
                 } else if(e1.getRawX() < e2.getRawX()){
                     if (canGoBack()){
+                        Log.d("Debug", "go back");
                         //Gesture : go back
                         goBack();
                     }
                     else {
                         //Gesture : no more backward history
+                        Log.d("Debug", "no more backward history");
                     }
                 }
             }

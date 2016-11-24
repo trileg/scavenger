@@ -9,7 +9,6 @@ import android.webkit.WebView;
 public final class CustomWebView extends WebView {
     Context context;
     GestureDetector gestureDetector;
-//    int gesture_stx, gesture_sty;
 
     public CustomWebView(Context context) {
         super(context);

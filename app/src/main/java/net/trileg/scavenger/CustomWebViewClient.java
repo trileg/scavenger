@@ -17,6 +17,7 @@ class Param {
     WebView webView = null;
     String url = "";
     String htmlSource = "";
+    String ua = "";
 }
 
 class CustomWebViewClient extends WebViewClient {
@@ -32,6 +33,7 @@ class CustomWebViewClient extends WebViewClient {
             param = new Param();
             param.url = url;
             param.webView = view;
+            param.ua = view.getSettings().getUserAgentString();
 
             DownloadTask task = new DownloadTask();
             task.execute(param);
@@ -53,12 +55,18 @@ class DownloadTask extends AsyncTask<Param, Integer, Param> {
 
         try {
             // ここでJsoup使ってDOMの編集を行う
-            Document document = Jsoup.connect(param.url).get();
+            Document document = Jsoup.connect(param.url).userAgent(param.ua).get();
+            Log.d("Debug", "charset: "+document.charset());
 
-            Log.d("Test", "title before: "+document.getElementsByTag("title"));
-            Element title = document.select("title").first();
-            title.text("Secure Information System Lab.");
-            Log.d("Test", "title after: "+document.getElementsByTag("title"));
+            Element current = document.getElementById("current");
+            if (param.url.contains("www.firefly.kutc.kansai-u.ac.jp") && current != null) {
+                Log.d("Test", "title before: "+document.getElementsByTag("title"));
+                Element title = document.select("title").first();
+                title.text("Secure Information System Lab.");
+                Log.d("Test", "title after: "+document.getElementsByTag("title"));
+
+                current.text("現在地");
+            }
 
             param.htmlSource = document.html();
         } catch (IOException e) {

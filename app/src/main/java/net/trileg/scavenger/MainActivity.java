@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         webView.setWebViewClient(new CustomWebViewClient());
-        webView.loadUrl("https://www.firefly.kutc.kansai-u.ac.jp/");
+        webView.loadUrl("https://www.google.co.jp/");
 
         webView.getSettings().setJavaScriptEnabled(true);
     }

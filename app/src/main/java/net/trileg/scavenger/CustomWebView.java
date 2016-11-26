@@ -42,8 +42,7 @@ public final class CustomWebView extends WebView {
             deltay = Math.abs(e1.getRawY()-e2.getRawY());
             velo = Math.abs(velocityX);
 
-            //pref_browser_gesturevelo is how fast finger moves.
-            //pref_browser_gesturevelo set to 350 as default in my app
+            //velo is how fast finger moves.
             if (deltax > 200 && deltay < 90 && velo > 350) {
                 if (e1.getRawX() > e2.getRawX()) {
                     if (canGoForward()){

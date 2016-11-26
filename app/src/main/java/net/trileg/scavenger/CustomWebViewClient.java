@@ -22,29 +22,27 @@ class Param {
 
 class CustomWebViewClient extends WebViewClient {
 
-    boolean firstLoad = true;
-    Param param;
+    private boolean firstLoad = true;
+    private Param param = new Param();
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         if (firstLoad) {
-            // 初めてページが読み込まれたら，ここの処理を行う
-            Log.d("Debug", "onPageStarted: "+url);
-            param = new Param();
+            // ページが読み込まれたら，ここの処理を行う
             param.url = url;
             param.webView = view;
             param.ua = view.getSettings().getUserAgentString();
 
+            // DOM編集スレッドを起動する
             DownloadTask task = new DownloadTask();
             task.execute(param);
-            firstLoad = false;
-        }
-    }
 
-    @Override
-    public void onPageFinished(WebView view, String url) {
-        // ページ読み込みが終わったら，ここの処理を行う
-        firstLoad = true;
+            // 無限ループ対策
+            firstLoad = false;
+        } else {
+            // DOM編集後のページ読み込みでここの処理を行う
+            firstLoad = true;
+        }
     }
 }
 
@@ -56,7 +54,6 @@ class DownloadTask extends AsyncTask<Param, Integer, Param> {
         try {
             // ここでJsoup使ってDOMの編集を行う
             Document document = Jsoup.connect(param.url).userAgent(param.ua).get();
-            Log.d("Debug", "charset: "+document.charset());
 
             Element current = document.getElementById("current");
             if (param.url.contains("www.firefly.kutc.kansai-u.ac.jp") && current != null) {
